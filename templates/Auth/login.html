@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="static/CSS/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
   </head>
   <body>
@@ -13,17 +14,17 @@
         <form action="#">
           <div class="row">
             <i class="fas fa-user"></i>
-            <input type="text" placeholder="Username" required>
+            <input type="text" placeholder="Username" name="Username" required>
           </div>
           <div class="row">
             <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Password" required>
+            <input type="password" placeholder="Password" name="Password" required>
           </div>
           <h3>USER TYPE:</h3>
-          <select class="type">
-              <option value=""></option>
+          <select name="user_type" class="type">
+              <option value="" selected disabled></option>
             <option value="Doctor">Doctor</option>
-            <option value="Reception">Reception</option>
+            <option value="Receptionist">Receptionist</option>
               <option value="View Patient">View Patient</option>
           </select>
           <div class="row button">

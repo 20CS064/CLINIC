@@ -1,38 +1,71 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render,redirect
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
-from clinic_auth import settings
-from django.core.mail import EmailMessage,send_mail
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_text
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import *
+from .serializers import PatientSerializer
+
+
+class PatientView(viewsets.ModelViewSet):
+    queryset = patient.objects.all()
+    serializer_class = PatientSerializer
 
 def login(request):
     if request.method == 'POST':
         Username = request.POST['Username']
         Password = request.POST['Password']
+        user_type = request.POST['user_type']
 
-        # 4.to check whether username and password is correct or not (already stored in DB or not
         user = authenticate(username=Username, password=Password)
+
+        #doctor is superuser and receptionist is normaluser
 
         if user is not None:
             login(request, user)
-            fname = user.first_name
-            return render(request, "authentification/index.html", {'fname': fname})
+            if user_type == 'Doctor':
+                return render(request,'')
+            elif user_type == 'Receptionist':
+                return render(request,'Auth/registration.html')
+            else:
+                return render(request,'')
         else:
             messages.error(request, "Bad Credentials")
             return redirect('login')
-
-    return render(request, "authentification/signin.html")
+    return render(request, "Auth/login.html")
 
 def registration(request):
     if request.method == "POST":
         username = request.POST['username']
-        fname = request.POST['fname']
-        lname = request.POST['lname']
-        email = request.POST['email']
-        pass1 = request.POST['pass1']
-        pass2 = request.POST['pass2']
+        PID = request.POST['PID']
+        Name = request.POST['Name']
+        Age = request.POST['Age']
+        DOB = request.POST['DOB']
+        gender = request.POST['gender']
+        BG = request.POST['BG']
+        PN = request.POST['PN']
+        Add = request.POST['Add']
+
+
+        #convert into serializer
+        # class patientList(APIView):
+        #     def get(self, request):
+        #         serializer = PatientSerializer(patient, many=True)
+        #         return Response(serializer.data)
+        #
+        #     def post(self, request):
+        #         patient.objects.create(
+        #             title=request.POST.get('title'),
+        #             text=request.POST.get('text'))
+        #         return HttpResponse(status=201)
+
+
+        #pass into POST method of rest framework
+    else:
+        if request.user.is_staff:
+            return render(request,'Auth/registration.html')
+        else:
+            return HttpResponseForbidden('<h1> 403 Forbidden <br>You are not allowed to access this page.</h1>')
