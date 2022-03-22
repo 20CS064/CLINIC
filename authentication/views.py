@@ -14,27 +14,28 @@ class PatientView(viewsets.ModelViewSet):
     queryset = patient.objects.all()
     serializer_class = PatientSerializer
 
-def login(request):
+def login_user(request):
     if request.method == 'POST':
-        Username = request.POST['Username']
-        Password = request.POST['Password']
+        username = request.POST['Username']
+        password = request.POST['Password']
         user_type = request.POST['user_type']
 
-        user = authenticate(username=Username, password=Password)
+        user = authenticate(username=username, password=password)
 
         #doctor is superuser and receptionist is normaluser
 
-        if user is not None:
+        if user is None:
             login(request, user)
             if user_type == 'Doctor':
                 return render(request,'')
             elif user_type == 'Receptionist':
-                return render(request,'Auth/registration.html')
+                return render(request, 'Auth/registration.html')
             else:
                 return render(request,'')
         else:
             messages.error(request, "Bad Credentials")
             return redirect('login')
+
     return render(request, "Auth/login.html")
 
 def registration(request):

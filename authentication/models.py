@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 
 User_type = (
     ("Doctor", "Doctor"),
@@ -25,17 +26,26 @@ Blood_group = (
 
 class Doctor(models.Model):
     Username = models.CharField(max_length=200)
-    Password = models.TextField(blank=False)
+    Password = models.CharField(max_length=32)
+    type = models.CharField(max_length=10,default='doctor')
 
     def __str__(self):
         return self.Username
+
+    def is_doctor(self):
+        return self.type
 
 class receptionist(models.Model):
     Username = models.CharField(max_length=200)
-    Password = models.TextField(blank=False)
+    Password = models.CharField(max_length=32)
+    type = models.CharField(max_length=10,default='Receptionist')
+
 
     def __str__(self):
         return self.Username
+
+    def is_receptionist(self):
+        return self.type
 
 class patient(models.Model):
     Patient_ID = models.CharField(max_length=200)
