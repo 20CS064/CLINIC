@@ -48,11 +48,11 @@ class receptionist(models.Model):
         return self.type
 
 class patient(models.Model):
-    Patient_ID = models.CharField(max_length=200)
+    PID = models.CharField(max_length=200)
     Name = models.CharField(max_length=200)
     Age = models.CharField(max_length=200)
     DOB = models.DateTimeField()
-    Gender = models.CharField(max_length=200 ,choices=Gender)
-    BloodGroup = models.CharField(max_length=200 ,choices=Blood_group)
-    Phone = models.CharField(max_length=200)
-    Address = models.CharField(max_length=200)
+    gender = models.CharField(max_length=200 ,choices=Gender)
+    BG = models.CharField(max_length=200 ,choices=Blood_group)
+    PN = models.CharField(max_length=200)
+    Add = models.CharField(max_length=200)

@@ -3,10 +3,8 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from .models import *
+from .models import patient
 from .serializers import PatientSerializer
 
 
@@ -40,7 +38,6 @@ def login_user(request):
 
 def registration(request):
     if request.method == "POST":
-        username = request.POST['username']
         PID = request.POST['PID']
         Name = request.POST['Name']
         Age = request.POST['Age']
@@ -50,21 +47,12 @@ def registration(request):
         PN = request.POST['PN']
         Add = request.POST['Add']
 
+        Patient = patient(PID=PID,Name=Name,Age=Age,DOB=DOB,gender=gender,BG=BG,PN=PN,Add=Add)
+        Patient.save()
 
-        #convert into serializer
-        # class patientList(APIView):
-        #     def get(self, request):
-        #         serializer = PatientSerializer(patient, many=True)
-        #         return Response(serializer.data)
-        #
-        #     def post(self, request):
-        #         patient.objects.create(
-        #             title=request.POST.get('title'),
-        #             text=request.POST.get('text'))
-        #         return HttpResponse(status=201)
+        return render(request,'Auth/registration.html')
 
 
-        #pass into POST method of rest framework
     else:
         if request.user.is_staff:
             return render(request,'Auth/registration.html')
